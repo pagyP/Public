@@ -1,0 +1,33 @@
+# This script is useful to take Protected Items in a recovery vault, go through all the items and set a recovery IP based on the Source IP. 
+# In this case, the regex will replace the third octet of a /24 IP only, so it retains the first, second and third octet. This makes for a 
+# cleaner transition when the VMs are replicated to a DR network where the only difference is the third octet.
+# ie 192.168.0.4 --> 192.168.1.4 
+# Assumes there is only one NIC on the VM 
+
+# Connect to your Azure subscription then run the following 
+
+Set-AzRecoveryServicesAsrVaultContext -Vault (Get-AzRecoveryServicesVault) # This is your vault, should be in your DR region. 
+$fabrics = Get-AzRecoveryServicesAsrFabric
+$Container = Get-AzRecoveryServicesAsrProtectionContainer -fabric $fabrics[1] # check this is the protected fabric, source region of protected items
+$ProtItems = Get-AzRecoveryServicesAsrReplicationProtectedItem -ProtectionContainer $container # check this is your protected container, source region of protected items  
+
+Foreach ($prot in $protitems)
+{
+	$props = @{
+		InputObject 			= $Prot
+		RecoveryNicStaticIPAddress 	= $Prot.NicDetailsList[0].PrimaryNicStaticIPAddress -replace "\d{1,3}(?=\.\d{1,3}$)","1"
+		PrimaryNic 			= $Prot.NicDetailsList[0].NicID
+		RecoveryNetworkId 		= $Prot.NicDetailsList[0].RecoveryVMNetworkId
+		RecoveryNicSubnetName 		= $Prot.NicDetailsList[0].VMSubnetName
+}
+
+Set-AzRecoveryServicesAsrReplicationProtectedItem @props
+
+}
+
+# To Check results
+
+$ProtItems = Get-AzRecoveryServicesAsrReplicationProtectedItem -ProtectionContainer $container # check this is your protected container, source region of protected items  
+$ProtItems | select FriendlyName,@{N="Primary IP";E={$_.nicdetailslist[0].PrimaryNicStaticIPAddress}}, @{N="Recovery IP";E={$_.nicdetailslist[0].ReplicaNicStaticIPAddress}}
+
+# Sometimes if the IP is taken this process may fail. In that case, have a think about making sure the IPs in the target site are available.
