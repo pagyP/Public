@@ -1,5 +1,5 @@
 # This script is useful to take Protected Items in a recovery vault, go through all the items and set a recovery IP based on the Source IP. 
-# In this case, the regex will replace the third octet of a /24 IP only, so it retains the first, second and third octet. This makes for a 
+# In this case, the regex will replace the third octet of a /24 IP only, so it retains the first, second and fourth octet. This makes for a 
 # cleaner transition when the VMs are replicated to a DR network where the only difference is the third octet.
 # ie 192.168.0.4 --> 192.168.1.4 
 # Assumes there is only one NIC on the VM 
