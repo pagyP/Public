@@ -1,0 +1,20 @@
+$cert = New-SelfSignedCertificate -CertStoreLocation "cert:\CurrentUser\My" `
+  -Subject "CN=AzureSelfSigned" `
+  -KeySpec KeyExchange `
+  
+$keyValue = [System.Convert]::ToBase64String($cert.GetRawCertData())
+
+$sp = New-AzADServicePrincipal -DisplayName AzureAppAutomationSP `
+  -CertValue $keyValue `
+  -EndDate $cert.NotAfter `
+  -StartDate $cert.NotBefore
+Sleep 20
+New-AzRoleAssignment -RoleDefinitionName Contributor -ServicePrincipalName $sp.ApplicationId
+
+$TenantId = "2e26406d-3461-48ae-b81c-4f66283951cd"
+$ApplicationId = "36eeb3af-3bb3-4cba-8100-07c23d9c7def"
+$Thumbprint = (Get-ChildItem cert:\CurrentUser\My\ | Where-Object {$_.Subject -eq "CN=AzureSelfSigned" }).Thumbprint
+ Connect-AzAccount -ServicePrincipal `
+  -CertificateThumbprint $Thumbprint `
+  -ApplicationId $ApplicationId `
+  -TenantId $TenantId
