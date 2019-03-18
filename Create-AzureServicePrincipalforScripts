@@ -13,7 +13,7 @@ New-AzRoleAssignment -RoleDefinitionName Contributor -ServicePrincipalName $sp.A
 
 $sub = Get-AzSubscription
 $TenantId = $sub[0].TenantId
-$ApplicationId = "36eeb3af-3bb3-4cba-8100-07c23d9c7def"
+$ApplicationId = $sp.applicationid
 $Thumbprint = (Get-ChildItem cert:\CurrentUser\My\ | Where-Object {$_.Subject -eq "CN=AzureSelfSigned" }).Thumbprint
  Connect-AzAccount -ServicePrincipal `
   -CertificateThumbprint $Thumbprint `
