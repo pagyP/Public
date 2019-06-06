@@ -4,7 +4,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "storageAccountName": {
-        "type": "String"
+        "type": "string"
+      },
+      "location": {
+        "type": "string"
       },
       "storageAccountType": {
         "type": "string",
@@ -21,7 +24,7 @@
         "type": "Microsoft.Storage/storageAccounts",
         "name": "[parameters('StorageAccountName')]",
         "apiVersion": "2015-06-15",
-        "location": "[resourceGroup().location]",
+        "location": "[parameters('location')]",
         "properties": {
           "accountType": "[parameters('storageAccountType')]"
         }
