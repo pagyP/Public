@@ -1,40 +1,47 @@
-
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "storageAccountName": {
-        "type": "string"
-      },
-      "location": {
-        "type": "string"
-      },
-      "storageAccountType": {
-        "type": "string",
-        "defaultValue": "Standard_LRS",
-        "allowedValues": [
-          "Standard_LRS",
-          "Standard_GRS",
-          "Standard_ZRS"        
-        ]
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_ZRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Storage Account type"
       }
     },
-    "resources": [
-      {
-        "type": "Microsoft.Storage/storageAccounts",
-        "name": "[parameters('StorageAccountName')]",
-        "apiVersion": "2015-06-15",
-        "location": "uksouth",
-        "properties": {
-          "accountType": "[parameters('storageAccountType')]"
-        }
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for all resources."
       }
-    ],
-      "outputs": {
-          "storageAccountInfo": {
-              "value": "[reference(concat('Microsoft.Storage/storageAccounts/', parameters('StorageAccountName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0])]",
-              "type" : "object"
-          }
-      }
+    }
+  },
+  "variables": {
+    "storageAccountName": "ewgwegwegwegwe"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "apiVersion": "2018-07-01",
+      "sku": {
+        "name": "[parameters('storageAccountType')]"
+      },
+      "kind": "StorageV2",
+      "properties": {}
+    }
+  ],
+  "outputs": {
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
+    }
   }
-  
+}
