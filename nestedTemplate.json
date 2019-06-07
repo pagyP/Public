@@ -3,11 +3,15 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "StorageAccountName": {
-            "type": "String"
+            "type": "string"
         },
-        "rgLocation": {
+        "location": {
             "type": "string",
             "defaultValue": "uksouth"
+        },
+        "resourcegroup": {
+            "type": "string",
+            "defaultValue": "MyRG"
         }
     },
     "variables": {
@@ -15,8 +19,9 @@
     },
     "resources": [
         {
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2018-07-01",
             "name": "nestedTemplate",
+            "resourcegroup" : "[parameters('resourcegroup')]", 
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "incremental",
@@ -29,7 +34,7 @@
                         "value": "[parameters('StorageAccountName')]"
                     },
                     "location": {
-                        "value": "[parameters('rgLocation')]"
+                        "value": "[parameters('location')]"
                     }
                 }
             }
