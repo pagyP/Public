@@ -9,10 +9,6 @@
             "type": "string",
             "defaultValue": "uksouth"
         },
-        "location": {
-            "type": "string",
-            "defaultValue": "uksouth"
-        },
         "resourcegroup": {
             "type": "string",
             "defaultValue": "MyRG"
@@ -25,8 +21,8 @@
         {
             "apiVersion": "2018-07-01",
             "name": "nestedTemplate",
-            "resourcegroup" : "[parameters('resourcegroup')]", 
             "type": "Microsoft.Resources/deployments",
+            "resourcegroup" : "[parameters('resourcegroup')]", 
             "properties": {
                 "mode": "incremental",
                 "templateLink": {
@@ -37,9 +33,13 @@
                     "StorageAccountName": {
                         "value": "[parameters('StorageAccountName')]"
                     },
+                    "resourcegroup": {
+                        "value": "[parameters('resourcegroup')]"
+                    },
                     "location": {
-                        "value": "[parameters('rgLocation')]"
+                        "value": "[parameters('rglocation')]"
                     }
+
                 }
             }
         }
