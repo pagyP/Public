@@ -3,7 +3,11 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "StorageAccountName": {
-            "type": "string"
+            "type": "String"
+        },
+        "rgLocation": {
+            "type": "string",
+            "defaultValue": "uksouth"
         },
         "location": {
             "type": "string",
@@ -34,7 +38,7 @@
                         "value": "[parameters('StorageAccountName')]"
                     },
                     "location": {
-                        "value": "[parameters('location')]"
+                        "value": "[parameters('rgLocation')]"
                     }
                 }
             }
