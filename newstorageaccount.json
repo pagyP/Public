@@ -23,6 +23,9 @@
     },
     "StorageAccountName": {
       "type": "string"
+    }, 
+    "resourcegroup": {
+      "type": "string"
     }
   },
   "variables": {
